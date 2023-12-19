@@ -6,12 +6,16 @@
 #include <chrono>
 #endif
 
+#include "compat2.h"
+
 static TTimePoint systemTimeMs()
 {
 #if !defined( __FLAT__ )
     return THardwareInfo::getTickCount()*55;
 #elif defined( __BORLANDC__ )
     return GetTickCount();
+#elif 1
+	return iclock64();
 #else
     return GetTickCount64();
 #endif

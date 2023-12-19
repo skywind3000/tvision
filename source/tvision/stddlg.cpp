@@ -26,6 +26,10 @@
 #define Uses_TDrawBuffer
 #define Uses_TFileDialog
 #define Uses_TSortedCollection
+#define _NO_OLDNAMES
+#include <stdlib.h>
+_CRTIMP char* __cdecl __MINGW_NOTHROW  itoa (int, char*, int);
+
 #include <tvision/tv.h>
 
 #if !defined( __DOS_H )
@@ -63,6 +67,10 @@
 #if !defined( __LIMITS_H )
 #include <limits.h>
 #endif  // __LIMITS_H
+
+#include <strings.h>
+
+int strnicmp( const char *s1, const char *s2, size_t maxlen ) noexcept;
 
 #define cpInfoPane "\x1E"
 
@@ -242,7 +250,7 @@ void TFileInfoPane::draw()
         {
 
         char buf[32];
-        ltoa( file_block.size, buf, 10 );
+        itoa( file_block.size, buf, 10 );
         b.moveStr( size.x - 38, buf, color );
 
         time = (struct ftime *) &file_block.time;

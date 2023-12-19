@@ -11,6 +11,8 @@
 #include <internal/utf8.h>
 #include <locale.h>
 
+#include "compatible.h"
+
 namespace tvision
 {
 
@@ -67,7 +69,7 @@ Win32ConsoleStrategy &Win32ConsoleStrategy::create() noexcept
     {
         // Disable bitmap font in legacy console because multibyte characters
         // are not displayed correctly.
-        CONSOLE_FONT_INFOEX fontInfo {};
+        CONSOLE_FONT_INFOEX2 fontInfo {};
         fontInfo.cbSize = sizeof(fontInfo);
         auto isBitmap = [](UINT family)
         {
@@ -78,7 +80,7 @@ Win32ConsoleStrategy &Win32ConsoleStrategy::create() noexcept
             // "A monospace bitmap font has all of these low-order bits clear".
             return !(family & (TMPF_FIXED_PITCH | TMPF_VECTOR | TMPF_TRUETYPE | TMPF_DEVICE));
         };
-        if ( GetCurrentConsoleFontEx(io.out(), FALSE, &fontInfo)
+        if ( GetCurrentConsoleFontEx2(io.out(), FALSE, &fontInfo)
              && isBitmap(fontInfo.FontFamily) )
         {
             // Compute the new font height based on the bitmap font size.
@@ -92,8 +94,8 @@ Win32ConsoleStrategy &Win32ConsoleStrategy::create() noexcept
                 wcscpy(fontInfo.FaceName, name);
                 // SetCurrentConsoleFontEx succeeds even if the font is not available.
                 // We need to check whether the font has actually been set.
-                SetCurrentConsoleFontEx(io.out(), FALSE, &fontInfo);
-                GetCurrentConsoleFontEx(io.out(), FALSE, &fontInfo);
+                SetCurrentConsoleFontEx2(io.out(), FALSE, &fontInfo);
+                GetCurrentConsoleFontEx2(io.out(), FALSE, &fontInfo);
                 if (wcscmp(fontInfo.FaceName, name) == 0)
                     break;
             }
@@ -274,7 +276,7 @@ bool Win32Display::screenChanged() noexcept
 {
     bool changed = TerminalDisplay::screenChanged();
     CONSOLE_FONT_INFO fontInfo;
-    if ( GetCurrentConsoleFont(io.out(), FALSE, &fontInfo)
+    if ( GetCurrentConsoleFont2(io.out(), FALSE, &fontInfo)
          && memcmp(&fontInfo, &lastFontInfo, sizeof(fontInfo)) != 0 )
     {
         changed = true;

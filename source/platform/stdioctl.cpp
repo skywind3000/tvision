@@ -5,6 +5,8 @@
 #include <internal/getenv.h>
 #include <initializer_list>
 
+#include "compatible.h"
+
 namespace tvision
 {
 
@@ -358,7 +360,7 @@ TPoint StdioCtl::getSize() const noexcept
 TPoint StdioCtl::getFontSize() const noexcept
 {
     CONSOLE_FONT_INFO fontInfo;
-    if (GetCurrentConsoleFont(out(), FALSE, &fontInfo))
+    if (GetCurrentConsoleFont2(out(), FALSE, &fontInfo))
         return {
             fontInfo.dwFontSize.X,
             fontInfo.dwFontSize.Y,

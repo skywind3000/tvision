@@ -62,14 +62,46 @@ btoa_lut_t btoa_lut = init_btoa_lut();
 
 #include <strings.h>
 
+int strncasecmp2(const char *s1, const char *s2, size_t n)
+{
+	if (n == 0) return 0;
+
+	while (n-- != 0 && tolower(*s1) == tolower(*s2)) {
+		if (n == 0 || *s1 == '\0' || *s2 == '\0') break;
+		s1++;
+		s2++;
+	}
+
+	return tolower(*(unsigned char *) s1) - tolower(*(unsigned char *) s2);
+}
+
+int strcasecmp2(const char *s1, const char *s2)
+{
+	while (tolower(*s1) == tolower(*s2)) {
+		if (*s1 == '\0' || *s2 == '\0') break;
+		s1++;
+		s2++;
+	}
+
+	return tolower(*(unsigned char *) s1) - tolower(*(unsigned char *) s2);
+}
+
 int stricmp( const char *s1, const char *s2 ) noexcept
 {
+#if 0
     return strcasecmp(s1, s2);
+#else
+	return strcasecmp2(s1, s2);
+#endif
 }
 
 int strnicmp( const char *s1, const char *s2, size_t maxlen ) noexcept
 {
+#if 0
     return strncasecmp(s1, s2, maxlen);
+#else
+    return strncasecmp2(s1, s2, maxlen);
+#endif
 }
 
 #include <cctype>
