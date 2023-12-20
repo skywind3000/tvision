@@ -80,6 +80,7 @@ Win32ConsoleStrategy &Win32ConsoleStrategy::create() noexcept
             // "A monospace bitmap font has all of these low-order bits clear".
             return !(family & (TMPF_FIXED_PITCH | TMPF_VECTOR | TMPF_TRUETYPE | TMPF_DEVICE));
         };
+	#if 0
         if ( GetCurrentConsoleFontEx2(io.out(), FALSE, &fontInfo)
              && isBitmap(fontInfo.FontFamily) )
         {
@@ -100,6 +101,7 @@ Win32ConsoleStrategy &Win32ConsoleStrategy::create() noexcept
                     break;
             }
         }
+	#endif
     }
     WinWidth::reset();
     auto &display = supportsVT ? *new AnsiDisplay<Win32Display>(io)
