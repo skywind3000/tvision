@@ -130,7 +130,7 @@ static inline char printfFmt(int radix)
     }
 }
 
-char *itoa( int value, char *buffer, int radix ) noexcept
+char *itoa2( int value, char *buffer, int radix ) noexcept
 {
     char format[] = {'%', printfFmt(radix), '\0'};
     sprintf(buffer, format, value);
